@@ -1,0 +1,2 @@
+[console_scripts]
+dpi-detector = dpi_detector.main:main

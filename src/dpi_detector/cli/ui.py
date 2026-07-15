@@ -1,8 +1,8 @@
 import asyncio
 from urllib.parse import urlparse
 
-from cli.console import console
-from utils.error_classifier import clean_detail
+from .console import console
+from ..utils.error_classifier import clean_detail
 
 
 def clean_hostname(url_or_domain: str) -> str:

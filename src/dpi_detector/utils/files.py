@@ -3,7 +3,9 @@ import json
 from pathlib import Path
 from typing import List, Any
 
-from cli.console import console
+from ..cli.console import console
+from .resources import find_resource
+
 
 def wait_and_exit(code: int = 1):
     print("\nНажмите любую клавишу для выхода...")
@@ -39,9 +41,9 @@ def get_resource_path(relative_path: str) -> Path:
 
 def load_domains(filepath: str = "domains.txt") -> List[str]:
     """Загружает список доменов из файла."""
-    path = get_resource_path(filepath)
+    path = find_resource(filepath)
 
-    if not path.exists():
+    if path is None or not path.exists():
         console.print(f"[bold red]КРИТИЧЕСКАЯ ОШИБКА: Файл не найден![/bold red]")
         console.print(f"[red]Путь: {path}[/red]")
         console.print(f"[yellow]Положите {filepath} рядом с программой.[/yellow]")
@@ -57,11 +59,12 @@ def load_domains(filepath: str = "domains.txt") -> List[str]:
         console.print(f"[bold red]Ошибка чтения файла {filepath}: {e}[/bold red]")
         wait_and_exit()
 
+
 def load_tcp_targets(filepath: str = "tcp16.json") -> List[Any]:
     """Загружает JSON с целями для TCP теста."""
-    path = get_resource_path(filepath)
+    path = find_resource(filepath)
 
-    if not path.exists():
+    if path is None or not path.exists():
         console.print(f"[bold red]КРИТИЧЕСКАЯ ОШИБКА: Файл не найден![/bold red]")
         console.print(f"[red]Путь: {path}[/red]")
         wait_and_exit()
@@ -78,9 +81,9 @@ def load_tcp_targets(filepath: str = "tcp16.json") -> List[Any]:
         wait_and_exit()
 def load_whitelist_sni(filepath: str = "whitelist_sni.txt") -> list:
     """Загружает список SNI для белого списка из файла."""
-    path = get_resource_path(filepath)
+    path = find_resource(filepath)
 
-    if not path.exists():
+    if path is None or not path.exists():
         console.print(f"[yellow]Файл {filepath} не найден, тест 4 недоступен.[/yellow]")
         return []
 

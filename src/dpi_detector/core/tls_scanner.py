@@ -4,14 +4,14 @@ import math
 import errno
 import asyncio
 import socket
-from utils.network import get_fake_ip_type
+from ..utils.network import get_fake_ip_type
 from typing import Tuple
 from urllib.parse import urlparse
 
 import httpx
 
-from utils import config
-from utils.error_classifier import (
+from ..utils import config
+from ..utils.error_classifier import (
     classify_ssl_error, classify_connect_error, classify_read_error,
     collect_error_text, find_cause, get_errno_from_chain,
     get_exception_chain_full

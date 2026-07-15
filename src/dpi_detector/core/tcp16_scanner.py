@@ -6,8 +6,8 @@ import string
 import time
 from typing import Tuple, Optional
 import httpx
-from utils import config
-from utils.error_classifier import classify_connect_error, classify_read_error
+from ..utils import config
+from ..utils.error_classifier import classify_connect_error, classify_read_error
 
 # Предварительно генерируем пул случайных символов (100 КБ).
 RANDOM_POOL = "".join(random.choices(string.ascii_letters + string.digits, k=100_000))

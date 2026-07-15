@@ -10,8 +10,8 @@ import httpx
 from rich.console import Console
 from rich.live import Live
 from rich.table import Table
-from cli.console import console as main_console
-from utils import config
+from ..cli.console import console as main_console
+from ..utils import config
 
 live_console = Console(record=False)
 

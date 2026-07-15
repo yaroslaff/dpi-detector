@@ -1,29 +1,28 @@
-import os
 import sys
+
+from pathlib import Path
+from importlib.resources import files
+from .resources import find_resource
 
 try:
     import yaml
 except ImportError:
     print("[!] Ошибка: Не установлена библиотека PyYAML.")
-    print("Установите зависимости: pip install -r requirements.txt")
+    print("Установите зависимости: pip install pyyaml")
     sys.exit(1)
 
-from pathlib import Path
 
 
 def load_config():
-    if getattr(sys, 'frozen', False):
-        exe_dir = Path(sys.executable).parent
-        external = exe_dir / "config.yml"
-        bundled  = Path(getattr(sys, '_MEIPASS', exe_dir)) / "config.yml"
-        yml_path = external if external.exists() else bundled
-    else:
-        base_dir = Path(__file__).resolve().parent.parent
-        yml_path = base_dir / "config.yml"
+    yml_path = find_resource("config.yml")
 
-    if not yml_path.exists():
-        print(f"[!] КРИТИЧЕСКАЯ ОШИБКА: Файл конфигурации не найден!")
-        print(f"Ожидаемый путь: {yml_path}")
+    if yml_path is None or not yml_path.exists():
+        print("[!] КРИТИЧЕСКАЯ ОШИБКА: Файл конфигурации не найден!")
+        print("Проверенные пути:")
+        print(f"  - {Path.cwd() / 'config.yml'} (текущая директория)")
+        if getattr(sys, 'frozen', False):
+            print(f"  - {Path(sys.executable).parent / 'config.yml'} (рядом с exe)")
+        print(f"  - dpi_detector/data/config.yml (внутри пакета)")
         input("Нажмите Enter для выхода...")
         sys.exit(1)
 
@@ -43,5 +42,6 @@ def load_config():
         print(f"{e}")
         input("Нажмите Enter для выхода...")
         sys.exit(1)
+
 
 load_config()

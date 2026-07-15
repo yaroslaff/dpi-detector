@@ -6,9 +6,9 @@ import base64
 import time
 from typing import Tuple, List, Union, Optional
 import httpx
-from utils import config
-from cli.console import console
-from utils.network import get_fake_ip_type
+from ..utils import config
+from ..cli.console import console
+from ..utils.network import get_fake_ip_type
 
 
 # ── DNS wire-format helpers ───────────────────────────────────────────────────

@@ -1,5 +1,5 @@
 from typing import Optional, List, Dict
-from core.telegram_scanner import _fmt_speed as _tg_fmt, _fmt_size as _tg_size
+from .core.telegram_scanner import _fmt_speed as _tg_fmt, _fmt_size as _tg_size
 import asyncio
 import os
 import sys
@@ -18,16 +18,16 @@ except ImportError as e:
     print("Установите зависимости: python -m pip install -r requirements.txt")
     sys.exit(1)
 
-from utils import config
-from cli.console import console
-from cli.ui import ask_test_selection, print_legend
-from cli.runners import run_domains_test, run_tcp_test, run_whitelist_sni_test, run_telegram_test
-from core.dns_scanner import (
+from .cli.console import console
+from .cli.ui import ask_test_selection, print_legend
+from .cli.runners import run_domains_test, run_tcp_test, run_whitelist_sni_test, run_telegram_test
+from .utils import config
+from .core.dns_scanner import (
     check_dns_integrity,
     check_dns_availability,
     collect_stub_ips_silently,
 )
-from utils.files import load_domains, load_tcp_targets, load_whitelist_sni, get_base_dir
+from .utils.files import load_domains, load_tcp_targets, load_whitelist_sni, get_base_dir
 
 CURRENT_VERSION = "3.3.0"
 GITHUB_REPO     = "Runnin4ik/dpi-detector"
@@ -223,7 +223,7 @@ def is_newer(latest: str, current: str) -> bool:
         return False
 
 
-async def main():
+async def _main():
     args = parse_arguments()
 
     if args.proxy:
@@ -233,7 +233,7 @@ async def main():
 
     global DOMAINS
     if args.domain:
-        from cli.ui import clean_hostname
+        from src.dpi_detector.cli.ui import clean_hostname
         DOMAINS = [clean_hostname(d) for d in args.domain]
         config.DNS_CHECK_DOMAINS = DOMAINS
 
@@ -285,7 +285,8 @@ async def main():
             raw = await _readline_cancelable()
             if raw.strip().lower() in ("y", "yes", "д", "да"):
                 save_to_file = True
-                result_path = os.path.join(get_base_dir(), "dpi_detector_results.txt")
+                # result_path = os.path.join(get_base_dir(), "dpi_detector_results.txt")
+                result_path = "dpi_detector_results.txt"
         except KeyboardInterrupt:
             raise
 
@@ -394,11 +395,11 @@ async def main():
         console.print()
 
 
-if __name__ == "__main__":
+def main():
     signal.signal(signal.SIGINT, fast_exit_handler)
 
     try:
-        asyncio.run(main())
+        asyncio.run(_main())
     except Exception as e:
         console.print(f"\n[bold red]Критическая ошибка:[/bold red] {e}")
         traceback.print_exc()
@@ -406,3 +407,6 @@ if __name__ == "__main__":
             print("\nНажмите Enter для выхода...")
             input()
         os._exit(1)
+
+if __name__ == "__main__":
+    main()

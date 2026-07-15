@@ -1,0 +1,72 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dpi-detector"
+version = "3.3.0"
+description = "Инструмент для анализа цензуры трафика: обнаруживает и классифицирует блокировки сайтов, хостингов и CDN"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Runni", email = "runnin4ik@example.com"}
+]
+keywords = ["dpi", "censorship", "network", "security", "tls", "sni"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet",
+    "Topic :: Security",
+    "Topic :: System :: Networking",
+]
+
+dependencies = [
+    "httpx[socks,http2]>=0.28.1",
+    "rich>=14.3.2",
+    "PyYAML>=6.0.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.5.0",
+    "pyinstaller>=6.0",
+]
+
+[project.scripts]
+dpi-detector = "dpi_detector.main:main"
+
+[project.urls]
+Homepage = "https://github.com/Runnin4ik/dpi-detector"
+Repository = "https://github.com/Runnin4ik/dpi-detector"
+Issues = "https://github.com/Runnin4ik/dpi-detector/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"dpi_detector" = ["data/*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
